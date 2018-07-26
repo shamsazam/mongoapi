@@ -1,7 +1,7 @@
 const express = require('express');
 const Repo = require('../../repository/base.repo');
 
-const crudController = (Model, expressRouter=null) => {
+const crudRouter = (Model, expressRouter=null) => {
     const router = expressRouter || express.Router();
     const repo = Repo(Model);
 
@@ -34,23 +34,24 @@ const crudController = (Model, expressRouter=null) => {
 
     router.put('/', async (req, res) => {
         try {
-            let list = await repo.update();
+            const { id, ...rest } = req.body;
+            let list = await repo.update(id, rest);
             return res.json(list);
         } catch (error) {
             res.status(500).send('error getting list of objects');
         }
     });
 
-    router.delete('/', async (req, res) => {
+    router.delete('/:id', async (req, res) => {
         try {
-            let list = await repo.delete();
+            let list = await repo.delete(req.params.id);
             return res.json(list);
         } catch (error) {
-            res.status(500).send('error getting list of objects');
+            res.status(500).send('error deleting objects');
         }
     });
 
     return router;
 };
 
-module.exports = crudController;
+module.exports = crudRouter;

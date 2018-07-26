@@ -13,7 +13,7 @@ const create = async (Model, obj) => {
 };
 const update = async (Model, obj) => {
     console.log('getting list of objects');
-    return await Model.find();
+    return await Model.update();
 };
 const remove = async (Model, id) => {
     console.log('getting list of objects');

@@ -14,7 +14,7 @@ const signup = async ({firstname, lastname, email, password}) => {
 };
 
 const login = async ({ email, password }) => {
-
+    
 };
 
 module.exports = { signup, login };

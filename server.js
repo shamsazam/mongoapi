@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
-const router = require('./controllers');
+const router = require('./routes');
 
 const PORT = process.env.PORT | 3333;
 
