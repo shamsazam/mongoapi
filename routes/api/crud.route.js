@@ -1,12 +1,15 @@
 const express = require('express');
-const Repo = require('../../repository/base.repo');
+const Repo = require('../../repository/crud.repo');
 const wrap = require('../../utils/asyncWrapper');
+const logger = require('../../utils/logger');
 
 const crudRouter = (Model, expressRouter=null) => {
     const router = expressRouter || express.Router();
     const repo = Repo(Model);
+    const model = Model.collection.collectionName;
 
     router.get('/', wrap(async (req, res) => {
+        logger.info('getting list of '+model);
         let list = await repo.list();
         res.json(list);
     }));
