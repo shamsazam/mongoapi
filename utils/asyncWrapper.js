@@ -1,7 +1,8 @@
+const logger = require('./logger');
 
 const errorHandler = (error, response) => {
     if(error){
-        console.log('error.message :', error.message);
+        logger.error(error.message);
         response.status(500).send(error.message);
     }
 }
