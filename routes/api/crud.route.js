@@ -1,55 +1,37 @@
 const express = require('express');
 const Repo = require('../../repository/base.repo');
+const wrap = require('../../utils/asyncWrapper');
 
 const crudRouter = (Model, expressRouter=null) => {
     const router = expressRouter || express.Router();
     const repo = Repo(Model);
 
-    router.get('/', async (req, res) => {
-        try {
-            let list = await repo.list();
-            return res.json(list);
-        } catch (error) {
-            res.status(500).send('error getting list of objects');
-        }
-    });
+    router.get('/', wrap(async (req, res) => {
+        let list = await repo.list();
+        res.json(list);
+    }));
 
-    router.get('/:id', async (req, res) => {
-        try {
-            let obj = await repo.get(req.params.id);
-            return res.json(obj);
-        } catch (error) {
-            res.status(500).send('error getting object');
-        }
-    });
+    router.get('/:id', wrap(async (req, res) => {
+        let obj = await repo.get(req.params.id);
+        res.json(obj);
 
-    router.post('/', async (req, res) => {
-        try {
-            let list = await repo.create();
-            return res.json(list);
-        } catch (error) {
-            res.status(500).send('error getting list of objects');
-        }
-    });
+    }));
 
-    router.put('/', async (req, res) => {
-        try {
-            const { id, ...rest } = req.body;
-            let list = await repo.update(id, rest);
-            return res.json(list);
-        } catch (error) {
-            res.status(500).send('error getting list of objects');
-        }
-    });
+    router.post('/', wrap(async (req, res) => {
+        let list = await repo.create();
+        return res.json(list);
+    }));
 
-    router.delete('/:id', async (req, res) => {
-        try {
-            let list = await repo.delete(req.params.id);
-            return res.json(list);
-        } catch (error) {
-            res.status(500).send('error deleting objects');
-        }
-    });
+    router.put('/', wrap(async (req, res) => {
+        const { id, ...rest } = req.body;
+        let list = await repo.update(id, rest);
+        return res.json(list);
+    }));
+
+    router.delete('/:id', wrap(async (req, res) => {
+        let list = await repo.delete(req.params.id);
+        return res.json(list);
+    }));
 
     return router;
 };
