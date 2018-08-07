@@ -9,9 +9,9 @@ const signup = async (user) => {
         throw new Error("a user already exist with this email");
     else {
         user.password = bcrypt.hashSync(user.password, 12);
-        let newUser = new User(user);
-        let result = await newUser.save();
-        return createToken(result);
+        const newUser = await User.create(user);
+        logger.info("successfully signed up with email "+newUser.email);
+        return createToken(newUser);
     }
 };
 
@@ -24,10 +24,10 @@ const login = async ({ email, password }) => {
             return createToken(user);
         }
         else
-            throw new Error("wrong password");
-    }else {
-        throw new Error("user with this email doesnot exist");
-    }
+            throw new Error("password is wrong");
+    } 
+    else
+        throw new Error(`user with email ${email} doesnot exist`);
 };
 
 module.exports = { signup, login };

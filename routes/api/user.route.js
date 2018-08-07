@@ -1,5 +1,14 @@
 const User = require('../../models/user');
-const crudCtrl = require('./crud.route');
+const crudRouter = require('./crud.route');
 const router = require('express').Router();
+const logger = require('../../utils/logger');
 
-module.exports = crudCtrl(User);
+router.put('/', (req, res, next) => {
+    if('password' in req.body){
+        logger.info('removing password field');
+        delete req.body["password"];
+    }
+    next();
+});
+
+module.exports = crudRouter(User, router);

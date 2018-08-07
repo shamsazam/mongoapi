@@ -9,7 +9,6 @@ const crudRouter = (Model, expressRouter=null) => {
     const model = Model.collection.collectionName;
 
     router.get('/', wrap(async (req, res) => {
-        logger.info('getting list of '+model);
         let list = await repo.list();
         res.json(list);
     }));
@@ -17,11 +16,10 @@ const crudRouter = (Model, expressRouter=null) => {
     router.get('/:id', wrap(async (req, res) => {
         let obj = await repo.get(req.params.id);
         res.json(obj);
-
     }));
 
     router.post('/', wrap(async (req, res) => {
-        let list = await repo.create();
+        let list = await repo.create(req.body);
         return res.json(list);
     }));
 
