@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const createToken = require('../utils/authToken');
+const logger = require('../utils/logger');
 
 const signup = async (user) => {
     const existingUser = await User.findOne({ email: user.email });
@@ -19,6 +20,7 @@ const login = async ({ email, password }) => {
     if(user){
         let success = bcrypt.compareSync(password, user.password);
         if(success){
+            logger.info("succesfully logged in with email "+email);
             return createToken(user);
         }
         else

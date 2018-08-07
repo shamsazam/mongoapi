@@ -6,9 +6,11 @@ const helmet = require('helmet');
 
 require('dotenv').config();
 
+var logger = require('./utils/logger');
+
 const router = require('./routes');
 
-const PORT = process.env.PORT | 3333;
+const PORT = process.env.PORT || 3333;
 
 const app = express();
 
@@ -22,5 +24,5 @@ app.use(bodyParser.json());
 
 app.use('/', router);
 
-app.listen(PORT, () => console.log('listening on port '+PORT));
+app.listen(PORT, () => logger.info('listening on port '+PORT));
 
