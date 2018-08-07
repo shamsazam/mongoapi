@@ -1,10 +1,8 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
-const config = require('../utils/config');
+const createToken = require('../utils/authToken');
 
 const signup = async (user) => {
-    console.log('user :', user);
     const existingUser = await User.findOne({ email: user.email });
     if(existingUser)
         throw new Error("a user already exist with this email");
@@ -12,9 +10,7 @@ const signup = async (user) => {
         user.password = bcrypt.hashSync(user.password, 12);
         let newUser = new User(user);
         let result = await newUser.save();
-        console.log('result :', result);
-        let token = jwt.sign({user: result.id}, config.JWT_SECRET);
-        return { user: result.id, token: token };
+        return createToken(result);
     }
 };
 
@@ -23,8 +19,7 @@ const login = async ({ email, password }) => {
     if(user){
         let success = bcrypt.compareSync(password, user.password);
         if(success){
-            let token = jwt.sign({user: user.id}, config.JWT_SECRET);
-            return { user: user.firstname, token: token };
+            return createToken(user);
         }
         else
             throw new Error("wrong password");
