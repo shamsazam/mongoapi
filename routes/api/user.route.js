@@ -1,7 +1,6 @@
 const User = require('../../models/user');
 const crudRouter = require('./crud.route');
 const router = require('express').Router();
-const logger = require('../../utils/logger');
 
 router.put('/', (req, res, next) => {
     if('password' in req.body){
