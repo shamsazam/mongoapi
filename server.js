@@ -4,6 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
+require('dotenv').config();
+
 const router = require('./routes');
 
 const PORT = process.env.PORT | 3333;
