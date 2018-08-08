@@ -3,13 +3,13 @@ const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const jwt = require('express-jwt');
 
 require('dotenv').config();
 
-var logger = require('./utils/logger');
-
+const logger = require('./utils/logger');
+const config = require('./utils/config');
 const router = require('./routes');
-
 const PORT = process.env.PORT || 3333;
 
 const app = express();
@@ -26,6 +26,8 @@ app.use((req, res, next) => {
     logger.info(`url: ${req.url}, method: ${req.method}`);
     next();
 });
+
+app.use(jwt({ secret: config.JWT_SECRET}).unless({path: ["/", "/auth/signup", "/auth/login"]}));
 
 app.use('/', router);
 
